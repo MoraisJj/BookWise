@@ -24,21 +24,23 @@ Leitores frequentes enfrentam dificuldades para organizar seu acervo pessoal, ac
 
 ## Diagrama de Domínio
 
-- Usuário
-    |
-    ├── possui ───► Leitura (várias)
-    |
-    └── tem ──────► Livro (vários, através da Leitura)
+```txt
+Usuário
+  |
+  ├── possui ──► Leitura (várias)
+  |
+  └── tem ──► Livro (vários, através da Leitura)
 
-- Livro
-    |
-    └── está associado a ───► Leitura (várias, um livro pode ser lido por vários usuários)
+Livro
+  |
+  └── está associado a ──► Leitura (várias)
 
-- Leitura
-    |
-    ├── pertence a ───► Usuário (um)
-    |
-    └── refere-se a ───► Livro (um)
+Leitura
+  |
+  ├── pertence a ──► Usuário (um)
+  |
+  └── refere-se a ──► Livro (um)
+```
 
 ### **Entidades Principais**
 - Usuário: pessoa que utiliza o sistema para gerenciar sua biblioteca pessoal.
@@ -47,6 +49,7 @@ Leitores frequentes enfrentam dificuldades para organizar seu acervo pessoal, ac
 
 ## Estrutura Prevista do Projeto
 
+```
 BookWise/
 ├── README.md
 ├── docs/
@@ -55,6 +58,7 @@ BookWise/
 │   ├── frontend/
 │   └── backend/
 └── .gitignore
+```
 
 ## Escopo Inicial
 
