@@ -86,3 +86,27 @@ BookWise/
 - Deploy em nuvem (Heroku, Vercel, etc.)
 - Testes automatizados
 - Suporte a múltiplos idiomas
+
+## Etapa 02 — Protótipo Estrutural com HTML Semântico
+
+### Páginas Criadas
+* `src/index.html`: Dashboard com listagem dos livros do acervo e resumo de leituras.
+* `src/login.html`: Interface de autenticação contendo formulários de login e cadastro.
+* `src/cadastrar-livro.html`: Formulário para inclusão de novos títulos na biblioteca.
+
+### Decisões da Estrutura HTML Semântica
+* Uso de elementos `<header>`, `<nav>`, `<main>` e `<footer>` para estabelecer a estrutura funcional de todas as páginas.
+* Utilização de `<article>` para delimitar cada livro na listagem, facilitando a acessibilidade e organização.
+* Todos os campos de formulários (`<input>`, `<select>`, `<textarea>`) possuem `<label>` explicitamente associados via atributo `for` ao respectivo `id`.
+
+## Estrutura do Projeto
+
+```text
+BookWise/
+├── README.md
+├── docs/
+│   └── proposta.md
+└── src/
+    ├── index.html
+    ├── login.html
+    └── cadastrar-livro.html
