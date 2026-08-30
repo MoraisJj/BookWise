@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookWise - Cadastrar Livro</title>
+</head>
+<body>
+
+    <header>
+        <h1>BookWise</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início / Acervo</a></li>
+                <li><a href="cadastrar-livro.html">Adicionar Livro</a></li>
+                <li><a href="login.html">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Novo Cadastro de Livro</h2>
+            <form action="#" method="POST">
+                <div>
+                    <label for="titulo">Título do Livro:</label>
+                    <input type="text" id="titulo" name="titulo" required>
+                </div>
+
+                <div>
+                    <label for="autor">Autor:</label>
+                    <input type="text" id="autor" name="autor" required>
+                </div>
+
+                <div>
+                    <label for="genero">Gênero:</label>
+                    <select id="genero" name="genero">
+                        <option value="ficcao">Ficção</option>
+                        <option value="fantasia">Fantasia</option>
+                        <option value="biografia">Biografia</option>
+                        <option value="tecnologia">Tecnologia</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="status">Status de Leitura:</label>
+                    <select id="status" name="status">
+                        <option value="lendo">Lendo</option>
+                        <option value="lido">Lido</option>
+                        <option value="quero-ler">Quero Ler</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="resenha">Minha Resenha / Anotações:</label>
+                    <textarea id="resenha" name="resenha" rows="4"></textarea>
+                </div>
+
+                <button type="submit">Salvar Livro</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 BookWise - Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
