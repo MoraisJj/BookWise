@@ -110,3 +110,23 @@ BookWise/
     ├── index.html
     ├── login.html
     └── cadastrar-livro.html
+
+## Etapa 03 — Interface Responsiva com CSS
+
+* Nesta etapa foram feitas as alterações no HTML Semântico anterior, sendo feita a implementação da interface responsiva com o CSS. As telas foram 
+devidamente implementadas para serem responsivas à diferentes tipos de dispositivos, como: desktop, tablet e smartphone. 
+
+## Estrutura do Projeto
+
+
+```text
+BookWise/
+├── README.md
+├── docs/
+│   └──evidencias
+│      └──etapa-03
+│   └── proposta.md
+└── src/
+    ├── index.html
+    ├── login.html
+    └── cadastrar-livro.html
