@@ -3,65 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookWise - Sua Biblioteca Pessoal</title>
+    <title>BookWise - Início / Acervo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <header>
         <h1>BookWise</h1>
-        <p>Gerenciamento inteligente da sua biblioteca pessoal</p>
         <nav>
             <ul>
                 <li><a href="index.html">Início / Acervo</a></li>
-                <li><a href="cadastrar-livro.html">Adicionar Livro</a></li>
-                <li><a href="login.html">Sair / Entrar</a></li>
+                <li><a href="cadastrar-livro.html">Cadastrar Livro</a></li>
+                <li><a href="login.html">Entrar / Cadastrar</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section id="resumo-acervo">
-            <h2>Resumo da Biblioteca</h2>
+            <h2>Resumo do Acervo</h2>
             <ul>
                 <li><strong>Total de Livros:</strong> 12</li>
-                <li><strong>Livros Lidos:</strong> 8</li>
-                <li><strong>Desejos de Leitura:</strong> 4</li>
+                <li><strong>Lidos:</strong> 8</li>
+                <li><strong>Em Leitura:</strong> 2</li>
+                <li><strong>Quero Ler:</strong> 2</li>
             </ul>
         </section>
 
-        <section id="lista-livros">
+        <section id="acervo">
             <h2>Meus Livros</h2>
-            
-            <article>
-                <h3>HTML e CSS: Projetar e Construir Websites</h3>
-                <p><strong>Autor:</strong> Jon Duckett</p>
-                <p><strong>Gênero:</strong> Desenvolvimento Web</p>
-                <p><strong>Status:</strong> <mark>Lido</mark></p>
-                <p><strong>Avaliação:</strong> 5/5</p>
-            </article>
+            <div id="lista-livros">
+                <article class="card-livro">
+                    <h3>Dom Casmurro</h3>
+                    <p><strong>Autor:</strong> Machado de Assis</p>
+                    <p><strong>Categoria:</strong> Literatura Brasileira</p>
+                    <p><strong>Status:</strong> Lido</p>
+                </article>
 
-            <article>
-                <h3>Java: Como Programar</h3>
-                <p><strong>Autor:</strong> Paul Deitel & Harvey Deitel</p>
-                <p><strong>Gênero:</strong> Programação Orientada a Objetos</p>
-                <p><strong>Status:</strong> <mark>Lendo</mark></p>
-                <p><strong>Avaliação:</strong> 4/5</p>
-            </article>
-
-            <article>
-                <h3>JavaScript: O Guia Definitivo</h3>
-                <p><strong>Autor:</strong> David Flanagan</p>
-                <p><strong>Gênero:</strong> Engenharia de Software</p>
-                <p><strong>Status:</strong> <mark>Quero Ler</mark></p>
-                <p><strong>Avaliação:</strong> -/5</p>
-            </article>
+                <article class="card-livro">
+                    <h3>1984</h3>
+                    <p><strong>Autor:</strong> George Orwell</p>
+                    <p><strong>Categoria:</strong> Ficção Científica</p>
+                    <p><strong>Status:</strong> Em Leitura</p>
+                </article>
+            </div>
         </section>
-        </main>
+    </main>
 
     <footer>
-        <p>&copy; 2026 BookWise - Todos os direitos reservados.</p>
+        <p>&copy; 2026 BookWise - Sistema de Gerenciamento de Acervo Pessoal</p>
     </footer>
 
+    
+    <script src="script.js"></script>
 </body>
 </html>

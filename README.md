@@ -110,6 +110,7 @@ BookWise/
     ├── index.html
     ├── login.html
     └── cadastrar-livro.html
+```
 
 ## Etapa 03 — Interface Responsiva com CSS
 
@@ -130,3 +131,4 @@ BookWise/
     ├── index.html
     ├── login.html
     └── cadastrar-livro.html
+```

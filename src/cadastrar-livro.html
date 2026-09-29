@@ -7,22 +7,25 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <header>
         <h1>BookWise</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Início / Acervo</a></li>
-                <li><a href="cadastrar-livro.html">Adicionar Livro</a></li>
-                <li><a href="login.html">Sair</a></li>
+                <li><a href="cadastrar-livro.html">Cadastrar Livro</a></li>
+                <li><a href="login.html">Entrar / Cadastrar</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section>
-            <h2>Novo Cadastro de Livro</h2>
-            <form action="#" method="POST">
+            <h2>Cadastrar Novo Livro</h2>
+            
+            <form id="form-cadastro" action="#" method="POST">
+                <!-- Div onde o JavaScript vai injetar a mensagem de sucesso ou erro -->
+                <div id="mensagem-feedback" style="display: none; padding: 10px; margin-bottom: 15px; border-radius: 5px; font-weight: bold;"></div>
+
                 <div>
                     <label for="titulo">Título do Livro:</label>
                     <input type="text" id="titulo" name="titulo" required>
@@ -34,28 +37,30 @@
                 </div>
 
                 <div>
-                    <label for="genero">Gênero:</label>
-                    <select id="genero" name="genero">
-                        <option value="ficcao">Ficção</option>
-                        <option value="fantasia">Fantasia</option>
-                        <option value="biografia">Biografia</option>
-                        <option value="tecnologia">Tecnologia</option>
-                        <option value="outros">Outros</option>
+                    <label for="categoria">Categoria / Gênero:</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Selecione um gênero...</option>
+                        <option value="Ficção Científica">Ficção Científica</option>
+                        <option value="Literatura Brasileira">Literatura Brasileira</option>
+                        <option value="Fantasia">Fantasia</option>
+                        <option value="Técnico / Acadêmico">Técnico / Acadêmico</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Biografia">Biografia</option>
                     </select>
                 </div>
 
                 <div>
                     <label for="status">Status de Leitura:</label>
-                    <select id="status" name="status">
+                    <select id="status" name="status" required>
+                        <option value="quero-ler">Quero Ler</option>
                         <option value="lendo">Lendo</option>
                         <option value="lido">Lido</option>
-                        <option value="quero-ler">Quero Ler</option>
                     </select>
                 </div>
 
                 <div>
-                    <label for="resenha">Minha Resenha / Anotações:</label>
-                    <textarea id="resenha" name="resenha" rows="4"></textarea>
+                    <label for="opiniao">Opinião / Resenha:</label>
+                    <textarea id="opiniao" name="opiniao" rows="4" placeholder="O que você achou do livro? (Opcional)"></textarea>
                 </div>
 
                 <button type="submit">Salvar Livro</button>
@@ -64,8 +69,9 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 BookWise - Todos os direitos reservados.</p>
+        <p>&copy; 2026 BookWise - Sistema de Gerenciamento de Acervo Pessoal</p>
     </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
