@@ -24,7 +24,7 @@ Leitores frequentes enfrentam dificuldades para organizar seu acervo pessoal, ac
 
 ## Diagrama de Domínio
 
-```txt
+```
 Usuário
   |
   ├── possui ──► Leitura (várias)
@@ -101,7 +101,7 @@ BookWise/
 
 ## Estrutura do Projeto
 
-```text
+```
 BookWise/
 ├── README.md
 ├── docs/
@@ -120,7 +120,7 @@ devidamente implementadas para serem responsivas à diferentes tipos de disposit
 ## Estrutura do Projeto
 
 
-```text
+```
 BookWise/
 ├── README.md
 ├── docs/
@@ -131,4 +131,26 @@ BookWise/
     ├── index.html
     ├── login.html
     └── cadastrar-livro.html
+```
+
+## Etapa 04: Interatividade com JavaScript
+Nesta etapa, o projeto ganhou comportamento dinâmico. Implementamos JavaScript para gerenciar os dados da aplicação diretamente no navegador do usuário, utilizando `localStorage`. As funcionalidades desenvolvidas incluem a validação de formulários, cadastro de novos livros, exclusão de itens e recálculo automático das estatísticas do acervo, tudo em tempo real e sem recarregar a página.
+
+## Estrutura do Projeto
+
+```
+BookWise/
+├── README.md
+├── docs/
+│   ├── evidencias/
+│   │   ├── etapa-03/
+│   │   └── etapa-04/
+│   ├── proposta.md
+│   └── etapa-04.md
+└── src/
+    ├── index.html
+    ├── login.html
+    ├── cadastrar-livro.html
+    ├── styles.css
+    └── script.js
 ```
