@@ -134,7 +134,7 @@ BookWise/
 ```
 
 ## Etapa 04: Interatividade com JavaScript
-Nesta etapa, o projeto ganhou comportamento dinâmico. Implementamos JavaScript para gerenciar os dados da aplicação diretamente no navegador do usuário, utilizando `localStorage`. As funcionalidades desenvolvidas incluem a validação de formulários, cadastro de novos livros, exclusão de itens e recálculo automático das estatísticas do acervo, tudo em tempo real e sem recarregar a página.
+Nesta etapa, o projeto ganhou comportamento dinâmico. JavaScript foi implementado para gerenciar os dados da aplicação diretamente no navegador do usuário, utilizando `localStorage`. As funcionalidades desenvolvidas incluem a validação de formulários, cadastro de novos livros, exclusão de itens e recálculo automático das estatísticas do acervo, tudo em tempo real e sem recarregar a página.
 
 ## Estrutura do Projeto
 
