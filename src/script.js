@@ -1,18 +1,17 @@
-// Estrutura de dados
+// API para persistir os dados
 let acervoLivros = JSON.parse(localStorage.getItem('bookwise_livros')) || [];
 
-
-// Selecionando elementos
+// Selecionando elementos, resgatando pelo id correspondente
 const formCadastro = document.getElementById('form-cadastro');
 const containerLivros = document.getElementById('lista-livros');
 const resumoStats = document.getElementById('resumo-acervo');
 
-
 // Validação e Eventos
 if (formCadastro) {
-    formCadastro.addEventListener('submit', function(evento) {
-        evento.preventDefault(); 
+    formCadastro.addEventListener('submit', function(evento) { // sempre que o evento submit for disparado ele executa a funcao
+        evento.preventDefault(); // bloqueia o comportamento de recarregar a pagina e tenta enviar os dados para um servidor 
 
+        // acesso dos elementos pelos ids respectivos, lendo ".value", texto armazenado em locais temporarios p/ ser validado  
         const titulo = document.getElementById('titulo').value.trim();
         const autor = document.getElementById('autor').value.trim();
         const categoria = document.getElementById('categoria').value;
@@ -27,9 +26,10 @@ if (formCadastro) {
             divFeedback.style.backgroundColor = '#f8d7da';
             divFeedback.style.color = '#721c24';
             divFeedback.style.display = 'block';
-            return;
+            return; // return p/ interromper a função antes de salvar
         }
 
+        // se passar, os dados sao organizados dentro do objeto "novoLivro"
         const novoLivro = {
             titulo: titulo,
             autor: autor,
@@ -38,8 +38,8 @@ if (formCadastro) {
             opiniao: opiniao
         };
 
-        acervoLivros.push(novoLivro);
-        localStorage.setItem('bookwise_livros', JSON.stringify(acervoLivros));
+        acervoLivros.push(novoLivro); // metodo push p/ o objeto ser inserido no final da lista
+        localStorage.setItem('bookwise_livros', JSON.stringify(acervoLivros)); // converte Array de objetos numa string formatada antes de salvar
 
         divFeedback.textContent = 'Livro cadastrado com sucesso!';
         divFeedback.style.backgroundColor = '#d4edda';
@@ -53,8 +53,6 @@ if (formCadastro) {
         }, 3000);
     });
 }
-
-
 
 // Essa função recebe a posição (index) do livro na lista e o apaga
 function excluirLivro(index) {
@@ -74,16 +72,14 @@ function excluirLivro(index) {
     }
 }
 
-
 // Alteração Dinâmica e Iteração
-
-    function renderizarLivros() {
+function renderizarLivros() {
     if (!containerLivros) return;
 
-    containerLivros.innerHTML = '';
+    containerLivros.innerHTML = ''; // limpeza dos containers
 
     // index para saber qual é a posição exata de cada livro
-    acervoLivros.forEach(function(livro, index) {
+    acervoLivros.forEach(function(livro, index) { // percorre a lista e desenha apenas a lista atualizada
         const article = document.createElement('article');
         article.className = 'card-livro';
 
@@ -103,11 +99,16 @@ function excluirLivro(index) {
             htmlCard += `<p><strong>Resenha:</strong> ${livro.opiniao}</p>`;
         }
 
-        // Injeta o botão de exclusão no final do cartão, passando a posição (index) do livro
+        // Injeta os botões de Editar e Excluir lado a lado
         htmlCard += `
-            <button onclick="excluirLivro(${index})" style="margin-top: 15px; padding: 6px 12px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%;">
-                Excluir Livro
-            </button>
+            <div style="display: flex; gap: 0.5rem; margin-top: 15px;">
+                <button onclick="abrirModalEdicao(${index})" style="flex: 1; padding: 6px 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Editar
+                </button>
+                <button onclick="excluirLivro(${index})" style="flex: 1; padding: 6px 12px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Excluir
+                </button>
+            </div>
         `;
 
         article.innerHTML = htmlCard;
@@ -115,7 +116,7 @@ function excluirLivro(index) {
     });
 }
 
-function atualizarEstatisticas() {
+function atualizarEstatisticas() { 
     if (!resumoStats) return;
 
     const total = acervoLivros.length;
@@ -134,5 +135,54 @@ function atualizarEstatisticas() {
     `;
 }
 
+// Execução inicial para desenhar a interface ao carregar a página
 renderizarLivros();
-atualizarEstatisticas();
+atualizarEstatisticas(); 
+
+// Abre o modal e preenche os campos com os dados atuais do livro
+function abrirModalEdicao(index) {
+    const livro = acervoLivros[index];
+    if (!livro) return;
+
+    document.getElementById('edit-index').value = index;
+    document.getElementById('edit-titulo').value = livro.titulo || '';
+    document.getElementById('edit-autor').value = livro.autor || '';
+    document.getElementById('edit-categoria').value = livro.categoria || '';
+    document.getElementById('edit-status').value = livro.status || '';
+    document.getElementById('edit-opiniao').value = livro.opiniao || '';
+
+    const modal = document.getElementById('modal-editar');
+    if (modal) {
+        modal.classList.remove('modal-oculto');
+    }
+}
+
+// Fecha a janela de edição
+function fecharModalEdicao() {
+    const modal = document.getElementById('modal-editar');
+    if (modal) {
+        modal.classList.add('modal-oculto');
+    }
+}
+
+// Salva as edições feitas
+function salvarEdicao(event) {
+    event.preventDefault();
+
+    const index = document.getElementById('edit-index').value;
+
+    // Substitui as informações na posição exata do array
+    acervoLivros[index] = {
+        titulo: document.getElementById('edit-titulo').value.trim(),
+        autor: document.getElementById('edit-autor').value.trim(),
+        categoria: document.getElementById('edit-categoria').value.trim(),
+        status: document.getElementById('edit-status').value,
+        opiniao: document.getElementById('edit-opiniao').value.trim()
+    };
+
+    // Atualiza o localStorage, recarrega a tela e fecha o modal
+    localStorage.setItem('bookwise_livros', JSON.stringify(acervoLivros));
+    renderizarLivros();
+    atualizarEstatisticas();
+    fecharModalEdicao();
+}

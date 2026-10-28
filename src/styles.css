@@ -1,22 +1,24 @@
 :root {
     --primary-color: #2c3e50;
     --secondary-color: #27ae60;
-    --background-color: #f8f9fa;
+    --background-color: #ffffff;
     --card-background: #ffffff;
     --text-color: #333333;
     --border-color: #e0e0e0;
     --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* css reset*/
+* { 
+    box-sizing: border-box; /* garante que as bordas ñ quebrem o tamanho das caixas*/
+    margin: 0; /* espaço externo, criar distancia entre os elementos da pagina*/
+    padding: 0; /* espaço interno, afasta o texto/imagem das bordas*/
 }
 
+/* fundo geral da pagina*/ 
 body {
     font-family: var(--font-family);
-    background-color: var(--background-color);
+    background-color: var(--background-color);  
     color: var(--text-color);
     line-height: 1.6;
     display: flex;
@@ -26,44 +28,50 @@ body {
 
 main {
     flex: 1;
-    max-width: 1200px;
+    max-width: 1200px; /*largura na tela*/
     width: 100%;
     margin: 2rem auto;
     padding: 0 1.5rem;
 }
 
+/* uso do Flexbox p/ alinhamento*/
 header {
     background-color: var(--primary-color);
     color: #ffffff;
     padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
+    display: flex; /* faz com que o logotipo fique de um lado e o menu do outro sem margem fixa*/
+    justify-content: space-between; /* propriedade p/ "empurrar" os elementos p/ as extremidades*/
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* logotipo */
 header h1 {
     font-size: 1.8rem;
 }
 
-nav ul {
+/* links do menu inicio, cadastrar..., ul controla a fila*/
+ nav ul {
     display: flex;
     list-style: none;
-    gap: 1.5rem;
+    gap: 1.5rem; /* gap p/ a distancia no menu*/
 }
 
+/* controla a cor do texto*/
 nav a {
     color: #ffffff;
     text-decoration: none;
     font-weight: 500;
 }
 
+/* controla quando o mouse passa por cima*/
 nav a:hover {
     color: var(--secondary-color);
 }
 
+/* controla "total: 2 | lidos: 1"*/
 #resumo-acervo {
     background-color: var(--card-background);
     padding: 1.5rem;
@@ -73,24 +81,29 @@ nav a:hover {
 }
 
 #resumo-acervo ul {
-    display: flex;
-    gap: 2rem;
+    display: flex; 
+    gap: 2rem; /* muda o espaço entre as caixas*/
     list-style: none;
     flex-wrap: wrap;
 }
 
+/* ul caixas grandes, li caixas pequenas*/
 #resumo-acervo li {
     background-color: #eef2f5;
     padding: 0.75rem 1.25rem;
     border-radius: 6px;
 }
 
+/* controla os livros que ficam do lado*/
 #lista-livros {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); 
+    /* uso do grid para criar a fileira lado a lado dos livros */
+    gap: 1.5rem; 
+    /* gap para dar o espaçamento exato entre os cartoes*/
 }
 
+/*cartao do livro individual, cor de fundo, sombra, etc*/
 article {
     background-color: var(--card-background);
     border: 1px solid var(--border-color);
@@ -102,6 +115,7 @@ article {
     gap: 0.5rem;
 }
 
+/*marcador de texto, cores de destaque, estitiliza os textos que estao dentro*/
 mark {
     background-color: #e8f8f5;
     color: var(--secondary-color);
@@ -110,6 +124,7 @@ mark {
     font-weight: bold;
 }
 
+/*caixa grande do formulario*/
 form {
     background-color: var(--card-background);
     border: 1px solid var(--border-color);
@@ -129,34 +144,37 @@ form label {
     display: block;
 }
 
+/*design das caixas brancas aonde digita*/
 form input, form select, form textarea {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.75rem; /*aumento de altura*/
     border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 1rem;
 }
 
+/*botoes de acao, salvar e excluir*/
 button[type="submit"] {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color); /*cor do fundo*/
     color: #ffffff;
     border: none;
-    padding: 0.85rem;
-    border-radius: 6px;
-    font-size: 1rem;
+    padding: 0.85rem; /*altera a altura*/
+    border-radius: 6px; /*altera a borda*/
+    font-size: 1rem; /*tamanho da fonte*/
     font-weight: bold;
     cursor: pointer;
 }
 
+/*rodape da pagina*/
 footer {
     background-color: var(--primary-color);
     color: #ffffff;
-    text-align: center;
+    text-align: center; /*alinhamento do texto*/
     padding: 1.25rem;
     margin-top: auto;
 }
 
-/* Breakpoints Responsivos */
+/* Regra para a responsividade celular/tablet */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -164,17 +182,19 @@ footer {
     }
     #resumo-acervo ul {
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.75rem; 
     }
     #lista-livros {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); 
+        
     }
 }
 
+/*celular*/
 @media (max-width: 480px) {
     nav ul {
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.5rem; 
     }
     #lista-livros {
         grid-template-columns: 1fr;
@@ -182,4 +202,47 @@ footer {
     form {
         padding: 1.25rem;
     }
+}
+
+/* Modal de Edição */
+.modal-oculto {
+    display: none !important;
+}
+
+#modal-editar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-conteudo {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.modal-conteudo form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+}
+
+.modal-botoes {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
 }

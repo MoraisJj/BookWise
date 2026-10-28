@@ -19,59 +19,49 @@
     </header>
 
     <main>
-        <section>
-            <h2>Cadastrar Novo Livro</h2>
-            
-            <form id="form-cadastro" action="#" method="POST">
-                <!-- Div onde o JavaScript vai injetar a mensagem de sucesso ou erro -->
-                <div id="mensagem-feedback" style="display: none; padding: 10px; margin-bottom: 15px; border-radius: 5px; font-weight: bold;"></div>
+    <h2>Cadastrar Novo Livro</h2>
 
-                <div>
-                    <label for="titulo">Título do Livro:</label>
-                    <input type="text" id="titulo" name="titulo" required>
-                </div>
+    <!-- AQUI: Cole o Bloco de Busca Externa (Etapa 05) antes do formulário -->
+    <div style="max-width: 600px; margin: 0 auto 1.5rem auto; display: flex; gap: 0.5rem;">
+        <input type="text" id="busca-api" placeholder="Digite o nome de um livro (ex: Dom Casmurro)" style="flex: 1; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px;">
+        <button type="button" id="btn-buscar-api" style="padding: 0.75rem 1.25rem; background-color: #17a2b8; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+            Buscar na Web
+        </button>
+    </div>
 
-                <div>
-                    <label for="autor">Autor:</label>
-                    <input type="text" id="autor" name="autor" required>
-                </div>
+    <!-- Div para as mensagens de erro/sucesso do formulário e da API -->
+    <div id="mensagem-feedback" style="display: none; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center; font-weight: bold;"></div>
 
-                <div>
-                    <label for="categoria">Categoria / Gênero:</label>
-                    <select id="categoria" name="categoria" required>
-                        <option value="">Selecione um gênero...</option>
-                        <option value="Ficção Científica">Ficção Científica</option>
-                        <option value="Literatura Brasileira">Literatura Brasileira</option>
-                        <option value="Fantasia">Fantasia</option>
-                        <option value="Técnico / Acadêmico">Técnico / Acadêmico</option>
-                        <option value="Romance">Romance</option>
-                        <option value="Biografia">Biografia</option>
-                    </select>
-                </div>
+    <!-- O formulário original do seu site vem logo aqui abaixo -->
+    <form id="form-cadastro">
+        
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required>
 
-                <div>
-                    <label for="status">Status de Leitura:</label>
-                    <select id="status" name="status" required>
-                        <option value="quero-ler">Quero Ler</option>
-                        <option value="lendo">Lendo</option>
-                        <option value="lido">Lido</option>
-                    </select>
-                </div>
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor" required>
 
-                <div>
-                    <label for="opiniao">Opinião / Resenha:</label>
-                    <textarea id="opiniao" name="opiniao" rows="4" placeholder="O que você achou do livro? (Opcional)"></textarea>
-                </div>
+        <label for="categoria">Categoria:</label>
+        <input type="text" id="categoria" name="categoria" required>
 
-                <button type="submit">Salvar Livro</button>
-            </form>
-        </section>
-    </main>
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="lido">Lido</option>
+            <option value="lendo">Lendo</option>
+            <option value="quero-ler">Quero Ler</option>
+        </select>
+
+        <label for="opiniao">Resenha / Opinião:</label>
+        <textarea id="opiniao" name="opiniao" rows="3"></textarea>
+
+        <button type="submit">Cadastrar Livro</button>
+    </form>
+</main>
 
     <footer>
         <p>&copy; 2026 BookWise - Todos os Direitos Reservados</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head> 
+    <meta charset="UTF-8"> <!-- usado para aceitar acentos, formatacoes-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- viewport usado p/ a responsividade-->
     <title>BookWise - Início / Acervo</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css"> <!-- liga o esqueleto HTML ate styless.css-->
 </head>
 <body>
     <header>
@@ -22,9 +22,9 @@
 </header>
 
     <main>
-        <section id="resumo-acervo">
+        <section id="resumo-acervo"> 
             <h2>Resumo do Acervo</h2>
-            <ul>
+            <ul> <!-- n°s ficticios apenas p/ a pagina n ficar quebrada-->
                 <li><strong>Total de Livros:</strong> 12</li>
                 <li><strong>Lidos:</strong> 8</li>
                 <li><strong>Em Leitura:</strong> 2</li>
@@ -34,14 +34,15 @@
 
         <section id="acervo">
             <h2>Meus Livros</h2>
-            <div id="lista-livros">
+            <div id="lista-livros"> <!-- assim o JS sabe aonde colocar os livros novos. No JS há o getElementById p/ focar
+                nessa div e injetar os elementos article la dentro-->
                 <article class="card-livro">
                     <h3>Dom Casmurro</h3>
                     <p><strong>Autor:</strong> Machado de Assis</p>
                     <p><strong>Categoria:</strong> Literatura Brasileira</p>
                     <p><strong>Status:</strong> Lido</p>
                 </article>
-
+                <!-- alguns exemplos usados na etapa 02, para simular os livros adicionados-->
                 <article class="card-livro">
                     <h3>1984</h3>
                     <p><strong>Autor:</strong> George Orwell</p>
@@ -52,11 +53,45 @@
         </section>
     </main>
 
-    <footer>
+    <footer> <!-- tag semantica p/ fechar a pagina de forma organizada-->
         <p>&copy; 2026 BookWise -  Todos os Direitos Reservados</p>
     </footer>
 
-    
-    <script src="script.js"></script>
-</body>
+    <!-- ligacao com o "cerebro", chama o arquivo que da a vida à pagina-->
+    <script type="module" src="js/main.js"></script>
+
+ <!-- Modal de Edição -->
+<div id="modal-editar" class="modal-oculto">
+    <div class="modal-conteudo">
+        <h3>Editar Livro</h3>
+        <form id="form-editar" onsubmit="salvarEdicao(event)">
+            <input type="hidden" id="edit-index">
+
+            <label for="edit-titulo">Título:</label>
+            <input type="text" id="edit-titulo" required>
+
+            <label for="edit-autor">Autor:</label>
+            <input type="text" id="edit-autor" required>
+
+            <label for="edit-categoria">Categoria:</label>
+            <input type="text" id="edit-categoria" required>
+
+            <label for="edit-status">Status:</label>
+            <select id="edit-status" required>
+                <option value="lido">Lido</option>
+                <option value="lendo">Lendo</option>
+                <option value="quero-ler">Quero Ler</option>
+            </select>
+
+            <label for="edit-opiniao">Resenha / Opinião:</label>
+            <textarea id="edit-opiniao" rows="3"></textarea>
+
+            <div class="modal-botoes">
+                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Salvar Alterações</button>
+                <button type="button" onclick="fecharModalEdicao()" style="background-color: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body> <!-- colocando no final garante que a estrutura visual ja foi carregada antes do JS começar a agir-->
 </html>
