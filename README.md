@@ -154,3 +154,41 @@ BookWise/
     ├── styles.css
     └── script.js
 ```
+## Funcionalidades da Etapa 05
+
+- **Consulta Assíncrona a API Externa (GET):** Busca de livros em tempo real utilizando a *Open Library API* com preenchimento automático de Título, Autor e identificação inteligente de Categoria (ex: classificação automática para livros de *Tecnologia*).
+- **Submissão Remota Simulada (POST):** Envio de dados em segundo plano para o serviço remoto *JSONPlaceholder*, simulando persistência em nuvem antes da gravação local.
+- **Gerenciamento de Estados da Interface:**
+  - **Carregamento (Loading):** Desabilitação de botões e indicação visual durante requisições HTTP.
+  - **Sucesso:** Preenchimento dinâmico dos campos e avisos visuais de confirmação.
+  - **Erro:** Tratamento de exceções via `try...catch` para falhas de rede ou buscas sem resultados.
+- **Arquitetura Modular ES6:** Separação completa de responsabilidades em arquivos isolados (`api.js`, `ui.js`, `main.js`).
+- **CRUD Completo e Persistência:** Operações de Criação, Leitura, Edição (via Modal flutuante) e Exclusão com armazenamento em `localStorage`.
+- Correção dos CARDS dos Livros. 
+
+---
+
+## Tecnologias Utilizadas
+
+- **HTML5 Semântico:** Estruturação acessível (`<header>`, `<main>`, `<article>`, `<form>`).
+- **CSS3:** Layouts responsivos construídos com **CSS Grid** e **Flexbox**.
+- **JavaScript (ES6 Modules):** Modularização nativa com `import` / `export` sem dependência de bibliotecas externas.
+- **Fetch API & Async/Await:** Comunicação HTTP assíncrona baseada em Promises.
+- **LocalStorage:** Persistência de dados no navegador do usuário.
+- **APIs Externas:** [Open Library API](https://openlibrary.org/dev/docs/api/search) (GET) e [JSONPlaceholder](https://jsonplaceholder.typicode.com/) (POST).
+
+---
+
+## Estrutura de Arquivos
+
+```
+src/
+└── frontend/
+    ├── index.html            # Interface do acervo e resumo estatístico
+    ├── cadastrar-livro.html  # Formulário de cadastro e busca via API
+    ├── styles.css            # Estilização global (CSS Grid, Flexbox e Modal)
+    └── js/
+        ├── api.js            # Módulo de chamadas HTTP assíncronas (Fetch API)
+        ├── ui.js             # Módulo de manipulação da DOM e estados da interface
+        └── main.js           # Módulo principal (orquestrador e LocalStorage)
+
