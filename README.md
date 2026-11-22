@@ -192,3 +192,21 @@ src/
         ├── ui.js             # Módulo de manipulação da DOM e estados da interface
         └── main.js           # Módulo principal (orquestrador e LocalStorage)
 
+---
+
+##  Etapa 06 — API REST da Aplicação
+
+Servidor back-end desenvolvido em **Node.js** com **Express**, disponibilizando o recurso `/livros` com operações CRUD completas, validação de entrada, respostas padronizadas em JSON e códigos HTTP semânticos.
+
+###  Estrutura do Back-end
+
+```text
+src/backend/
+├── controllers/
+│   └── livrosController.js      # Lógica de negócio, validações e respostas HTTP
+├── routes/
+│   └── livrosRoutes.js          # Definição das rotas REST (/livros)
+├── bookwise-collection.json     # Coleção exportada (Thunder Client / Postman)
+├── package.json                 # Dependências e scripts de execução
+└── server.js                    # Configuração do Express, CORS e porta 3000
+
