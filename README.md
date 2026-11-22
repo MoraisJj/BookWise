@@ -191,7 +191,7 @@ src/
         ├── api.js            # Módulo de chamadas HTTP assíncronas (Fetch API)
         ├── ui.js             # Módulo de manipulação da DOM e estados da interface
         └── main.js           # Módulo principal (orquestrador e LocalStorage)
-
+```
 ---
 
 ##  Etapa 06 — API REST da Aplicação
