@@ -1,0 +1,134 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "BookWise API - Etapa 06",
+    "collectionId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+    "dateExported": "2026-11-22T21:50:58.083Z",
+    "version": "1.4",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "a585835b-9e76-4448-b777-32e84238f702",
+            "colId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+            "containerId": "",
+            "name": "http://localhost:3000/livros",
+            "url": "http://localhost:3000/livros",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2026-11-22T21:37:52.584Z",
+            "modified": "2026-11-22T21:37:52.584Z",
+            "headers": []
+        },
+        {
+            "_id": "4611c798-2f15-415a-9f05-e6030f925dee",
+            "colId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+            "containerId": "",
+            "name": "http://localhost:3000/livros",
+            "url": "http://localhost:3000/livros",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2026-11-22T21:39:59.516Z",
+            "modified": "2026-11-22T21:39:59.516Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": [
+                    "{\r",
+                    "  \"titulo\": \"O Programador Pragmático\",\r",
+                    "  \"autor\": \"Andrew Hunt e David Thomas\",\r",
+                    "  \"categoria\": \"Tecnologia\",\r",
+                    "  \"status\": \"quero-ler\",\r",
+                    "  \"opiniao\": \"Leitura fundamental sobre engenharia de software.\"\r",
+                    "}"
+                ],
+                "form": []
+            }
+        },
+        {
+            "_id": "88874f08-17b4-4fad-a603-c1ce6d77158a",
+            "colId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+            "containerId": "",
+            "name": "http://localhost:3000/livros/3",
+            "url": "http://localhost:3000/livros/3",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2026-11-22T21:40:43.006Z",
+            "modified": "2026-11-22T21:40:43.006Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": [
+                    "{\r",
+                    "  \"titulo\": \"O Programador Pragmático\",\r",
+                    "  \"autor\": \"Andrew Hunt e David Thomas\",\r",
+                    "  \"categoria\": \"Tecnologia\",\r",
+                    "  \"status\": \"lido\",\r",
+                    "  \"opiniao\": \"Concluído! Excelentes dicas práticas para o dia a dia.\"\r",
+                    "}"
+                ],
+                "form": []
+            }
+        },
+        {
+            "_id": "3410980f-f5be-4468-95ef-2485840786a9",
+            "colId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+            "containerId": "",
+            "name": "http://localhost:3000/livros/3",
+            "url": "http://localhost:3000/livros/3",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2026-11-22T21:42:38.503Z",
+            "modified": "2026-11-22T21:42:38.503Z",
+            "headers": []
+        },
+        {
+            "_id": "750c1609-5810-438f-88ba-764dd591da61",
+            "colId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+            "containerId": "",
+            "name": "Erro 400 - Título Obrigatório",
+            "url": "http://localhost:3000/livros",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2026-11-22T21:46:19.682Z",
+            "modified": "2026-11-22T21:46:19.683Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": [
+                    "{\r",
+                    "  \"titulo\": \"\",\r",
+                    "  \"autor\": \"Andrew Hunt e David Thomas\",\r",
+                    "  \"categoria\": \"Tecnologia\",\r",
+                    "  \"status\": \"quero-ler\",\r",
+                    "  \"opiniao\": \"Leitura fundamental sobre engenharia de software.\"\r",
+                    "}"
+                ],
+                "form": []
+            }
+        },
+        {
+            "_id": "6e84d619-dc62-4661-88c1-c2363b276490",
+            "colId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+            "containerId": "",
+            "name": "Erro 404 - Livro Não Encontrado",
+            "url": "http://localhost:3000/livros/999",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2026-11-22T21:47:17.338Z",
+            "modified": "2026-11-22T21:47:17.338Z",
+            "headers": []
+        },
+        {
+            "_id": "e078c045-eb00-43f1-bc49-99fd67f6614e",
+            "colId": "6136ad4b-578b-4705-b1b9-1092b9b6f2eb",
+            "containerId": "",
+            "name": "http://localhost:3000/livros/1",
+            "url": "http://localhost:3000/livros/1",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2026-11-22T21:49:07.211Z",
+            "modified": "2026-11-22T21:49:07.211Z",
+            "headers": []
+        }
+    ],
+    "ref": "Fefr2w33vazN0BEFsUyhoYiPOkwY87zjs5ciLbyxnQs6dqY5Fou-IL5X_oFEDzRp-nBM37a9d35zCRRJ6eAclw"
+}
