@@ -1,32 +1,19 @@
-// Base de dados em memória (simula o banco de dados da aplicação)
-let livros = [
-    {
-        id: 1,
-        titulo: "Clean Code",
-        autor: "Robert C. Martin",
-        categoria: "Tecnologia",
-        status: "lido",
-        opiniao: "Essencial para aprender boas práticas de legibilidade e refatoração."
-    },
-    {
-        id: 2,
-        titulo: "Dom Casmurro",
-        autor: "Machado de Assis",
-        categoria: "Literatura",
-        status: "lendo",
-        opiniao: "Clássico da literatura brasileira com narrador não confiável."
-    }
-];
+import * as livroRepository from "../repositories/livroRepository.js";
+import * as categoriaRepository from "../repositories/categoriaRepository.js";
 
-let proximoId = 3;
 const STATUS_VALIDOS = ["lido", "lendo", "quero-ler"];
 
-// 1. GET /livros — Consulta geral
+// GET /livros
 export function listarLivros(req, res) {
-    return res.status(200).json(livros);
+    try {
+        const livros = livroRepository.listarTodos();
+        return res.status(200).json(livros);
+    } catch (erro) {
+        return res.status(500).json({ erro: "Erro interno ao consultar livros no banco de dados." });
+    }
 }
 
-// 2. GET /livros/:id — Consulta individual
+// GET /livros/:id
 export function buscarLivroPorId(req, res) {
     const id = Number(req.params.id);
 
@@ -34,20 +21,23 @@ export function buscarLivroPorId(req, res) {
         return res.status(400).json({ erro: "O ID informado deve ser um número válido." });
     }
 
-    const livro = livros.find((item) => item.id === id);
+    try {
+        const livro = livroRepository.buscarPorId(id);
 
-    if (!livro) {
-        return res.status(404).json({ erro: `Livro com ID ${id} não encontrado.` });
+        if (!livro) {
+            return res.status(404).json({ erro: `Livro com ID ${id} não encontrado.` });
+        }
+
+        return res.status(200).json(livro);
+    } catch (erro) {
+        return res.status(500).json({ erro: "Erro interno ao buscar livro no banco de dados." });
     }
-
-    return res.status(200).json(livro);
 }
 
-// 3. POST /livros — Criação de novo livro
+// POST /livros
 export function criarLivro(req, res) {
-    const { titulo, autor, categoria, status, opiniao } = req.body;
+    const { titulo, autor, status, opiniao, categoria_id } = req.body;
 
-    // Validação de campos obrigatórios
     if (!titulo || typeof titulo !== "string" || titulo.trim() === "") {
         return res.status(400).json({ erro: "O campo 'titulo' é obrigatório." });
     }
@@ -56,28 +46,44 @@ export function criarLivro(req, res) {
         return res.status(400).json({ erro: "O campo 'autor' é obrigatório." });
     }
 
-    const statusNormalizado = status ? status.toLowerCase().trim() : "quero-ler";
+    const categoriaIdNum = Number(categoria_id);
+    if (!categoria_id || Number.isNaN(categoriaIdNum)) {
+        return res.status(400).json({ erro: "O campo 'categoria_id' é obrigatório e deve ser numérico." });
+    }
+
+    const statusNormalizado = status ? String(status).toLowerCase().trim() : "quero-ler";
     if (!STATUS_VALIDOS.includes(statusNormalizado)) {
         return res.status(400).json({
             erro: "Status inválido. Valores aceitos: 'lido', 'lendo' ou 'quero-ler'."
         });
     }
 
-    const novoLivro = {
-        id: proximoId++,
-        titulo: titulo.trim(),
-        autor: autor.trim(),
-        categoria: categoria && categoria.trim() !== "" ? categoria.trim() : "Geral",
-        status: statusNormalizado,
-        opiniao: opiniao ? opiniao.trim() : ""
-    };
+    try {
+        const categoriaExiste = categoriaRepository.buscarPorId(categoriaIdNum);
+        if (!categoriaExiste) {
+            return res.status(400).json({
+                erro: `A categoria com ID ${categoriaIdNum} não existe. Cadastre a categoria antes de vincular o livro.`
+            });
+        }
 
-    livros.push(novoLivro);
+        const novoLivro = livroRepository.criar({
+            titulo: titulo.trim(),
+            autor: autor.trim(),
+            status: statusNormalizado,
+            opiniao: opiniao ? String(opiniao).trim() : "",
+            categoria_id: categoriaIdNum
+        });
 
-    return res.status(201).json(novoLivro);
+        return res.status(201).json(novoLivro);
+    } catch (erro) {
+        if (erro.message && erro.message.includes("FOREIGN KEY constraint failed")) {
+            return res.status(400).json({ erro: "Violação de chave estrangeira: categoria_id inválido." });
+        }
+        return res.status(500).json({ erro: "Erro interno ao cadastrar livro no banco de dados." });
+    }
 }
 
-// 4. PUT /livros/:id — Atualização completa de um livro existente
+// PUT /livros/:id
 export function atualizarLivro(req, res) {
     const id = Number(req.params.id);
 
@@ -85,13 +91,7 @@ export function atualizarLivro(req, res) {
         return res.status(400).json({ erro: "O ID informado deve ser um número válido." });
     }
 
-    const indice = livros.findIndex((item) => item.id === id);
-
-    if (indice === -1) {
-        return res.status(404).json({ erro: `Livro com ID ${id} não encontrado.` });
-    }
-
-    const { titulo, autor, categoria, status, opiniao } = req.body;
+    const { titulo, autor, status, opiniao, categoria_id } = req.body;
 
     if (!titulo || typeof titulo !== "string" || titulo.trim() === "") {
         return res.status(400).json({ erro: "O campo 'titulo' é obrigatório para atualização." });
@@ -101,26 +101,45 @@ export function atualizarLivro(req, res) {
         return res.status(400).json({ erro: "O campo 'autor' é obrigatório para atualização." });
     }
 
-    const statusNormalizado = status ? status.toLowerCase().trim() : livros[indice].status;
+    const categoriaIdNum = Number(categoria_id);
+    if (!categoria_id || Number.isNaN(categoriaIdNum)) {
+        return res.status(400).json({ erro: "O campo 'categoria_id' é obrigatório e deve ser numérico." });
+    }
+
+    const statusNormalizado = status ? String(status).toLowerCase().trim() : "quero-ler";
     if (!STATUS_VALIDOS.includes(statusNormalizado)) {
         return res.status(400).json({
             erro: "Status inválido. Valores aceitos: 'lido', 'lendo' ou 'quero-ler'."
         });
     }
 
-    livros[indice] = {
-        id,
-        titulo: titulo.trim(),
-        autor: autor.trim(),
-        categoria: categoria && categoria.trim() !== "" ? categoria.trim() : "Geral",
-        status: statusNormalizado,
-        opiniao: opiniao !== undefined ? String(opiniao).trim() : livros[indice].opiniao
-    };
+    try {
+        const categoriaExiste = categoriaRepository.buscarPorId(categoriaIdNum);
+        if (!categoriaExiste) {
+            return res.status(400).json({
+                erro: `A categoria com ID ${categoriaIdNum} não existe.`
+            });
+        }
 
-    return res.status(200).json(livros[indice]);
+        const livroAtualizado = livroRepository.atualizar(id, {
+            titulo: titulo.trim(),
+            autor: autor.trim(),
+            status: statusNormalizado,
+            opiniao: opiniao !== undefined ? String(opiniao).trim() : "",
+            categoria_id: categoriaIdNum
+        });
+
+        if (!livroAtualizado) {
+            return res.status(404).json({ erro: `Livro com ID ${id} não encontrado.` });
+        }
+
+        return res.status(200).json(livroAtualizado);
+    } catch (erro) {
+        return res.status(500).json({ erro: "Erro interno ao atualizar livro no banco de dados." });
+    }
 }
 
-// 5. DELETE /livros/:id — Exclusão de um livro
+// DELETE /livros/:id
 export function deletarLivro(req, res) {
     const id = Number(req.params.id);
 
@@ -128,16 +147,20 @@ export function deletarLivro(req, res) {
         return res.status(400).json({ erro: "O ID informado deve ser um número válido." });
     }
 
-    const indice = livros.findIndex((item) => item.id === id);
+    try {
+        const livroExistente = livroRepository.buscarPorId(id);
 
-    if (indice === -1) {
-        return res.status(404).json({ erro: `Livro com ID ${id} não encontrado.` });
+        if (!livroExistente) {
+            return res.status(404).json({ erro: `Livro com ID ${id} não encontrado.` });
+        }
+
+        livroRepository.deletar(id);
+
+        return res.status(200).json({
+            mensagem: "Livro removido com sucesso.",
+            livro: livroExistente
+        });
+    } catch (erro) {
+        return res.status(500).json({ erro: "Erro interno ao remover livro no banco de dados." });
     }
-
-    const [livroRemovido] = livros.splice(indice, 1);
-
-    return res.status(200).json({
-        mensagem: "Livro removido com sucesso.",
-        livro: livroRemovido
-    });
 }

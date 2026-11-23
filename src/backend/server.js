@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
 import livrosRoutes from "./routes/livrosRoutes.js";
+import categoriasRoutes from "./routes/categoriasRoutes.js";
 
 const app = express();
 const PORT = 3000;
 
-// Middlewares globais
 app.use(cors());
 app.use(express.json());
 
@@ -21,13 +21,14 @@ app.use((err, req, res, next) => {
 app.get("/", (req, res) => {
     return res.status(200).json({
         aplicacao: "BookWise API",
-        versao: "1.0.0",
+        versao: "2.0.0 - Etapa 07 (Persistência SQLite)",
         status: "online",
-        endpoints: "/livros"
+        endpoints: ["/categorias", "/livros"]
     });
 });
 
-// Rotas do recurso principal
+// Rotas dos recursos relacionados
+app.use("/categorias", categoriasRoutes);
 app.use("/livros", livrosRoutes);
 
 // Tratamento padrão para rotas inexistentes (404)
