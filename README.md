@@ -154,7 +154,7 @@ BookWise/
     ├── styles.css
     └── script.js
 ```
-## Funcionalidades da Etapa 05
+## Etapa 05 - Consumo de API Externa e Programação Assíncrona  
 
 - **Consulta Assíncrona a API Externa (GET):** Busca de livros em tempo real utilizando a *Open Library API* com preenchimento automático de Título, Autor e identificação inteligente de Categoria (ex: classificação automática para livros de *Tecnologia*).
 - **Submissão Remota Simulada (POST):** Envio de dados em segundo plano para o serviço remoto *JSONPlaceholder*, simulando persistência em nuvem antes da gravação local.
@@ -192,117 +192,28 @@ src/
         ├── ui.js             # Módulo de manipulação da DOM e estados da interface
         └── main.js           # Módulo principal (orquestrador e LocalStorage)
 ```
-LocalStorage)
-```
-
 ---
 
-## 🔹 Etapa 07 — Persistência e CRUD com Banco de Dados
+##  Etapa 06 — API REST da Aplicação
 
-Evolução da API REST do **BookWise** substituindo o armazenamento temporário em memória por persistência real em banco de dados relacional (**SQLite**), contemplando duas entidades relacionadas (`categorias` e `livros`), desacoplamento via padrão **Repository**, validações de entrada e tratamento de erros de persistência e integridade referencial.
+Servidor back-end desenvolvido em **Node.js** com **Express**, disponibilizando o recurso `/livros` com operações CRUD completas, armazenamento inicial em memória, validação de entrada, respostas padronizadas em JSON e códigos HTTP semânticos.
 
----
-
-### 🗄️ 1. Escolha do Banco de Dados e Justificativa
-
-* **Banco de Dados Escolhido:** **SQLite** (Modelo Relacional), integrado por meio do módulo nativo `node:sqlite` do Node.js.
-* **Justificativa da Escolha:**
-  1. **Integridade Referencial e Consistência:** O domínio do BookWise possui entidades estruturadas com dependência direta entre si (`categorias` e `livros`). O modelo relacional permite garantir a consistência dos dados no próprio banco por meio de chaves primárias (`PRIMARY KEY`), restrições de unicidade (`UNIQUE`), validação de domínio (`CHECK`) e chaves estrangeiras (`FOREIGN KEY`).
-  2. **Portabilidade e Execução Imediata:** O SQLite armazena todo o banco de dados em um único arquivo local (`src/backend/database/bookwise.sqlite`), eliminando a necessidade de instalar ou configurar servidores externos de banco de dados para executar e avaliar a aplicação.
-  3. **Desacoplamento entre API e Banco (Padrão Repository):** Toda a lógica de acesso a dados e comandos SQL foi isolada na camada `src/backend/repositories/`. As rotas e os controladores HTTP não possuem acoplamento direto com o SQLite, facilitando futuras manutenções ou migrações de SGBD.
-
----
-
-### 📂 2. Arquitetura do Back-end
+###  Estrutura do Back-end (Etapa 06)
 
 ```text
 src/backend/
-├── database/
-│   ├── connection.js            # Conexão SQLite, PRAGMA foreign_keys, DDL e seed inicial
-│   └── bookwise.sqlite          # Arquivo do banco de dados gerado automaticamente
-├── repositories/
-│   ├── categoriaRepository.js   # Operações SQL da entidade categorias
-│   └── livroRepository.js       # Operações SQL da entidade livros (com INNER JOIN)
 ├── controllers/
-│   ├── categoriasController.js  # Regras de negócio, validações e erros HTTP de /categorias
-│   └── livrosController.js      # Regras de negócio, validações e erros HTTP de /livros
+│   └── livrosController.js      # Lógica de negócio, validações e respostas HTTP
 ├── routes/
-│   ├── categoriasRoutes.js      # Definição dos endpoints /categorias
-│   └── livrosRoutes.js          # Definição dos endpoints /livros
+│   └── livrosRoutes.js          # Definição das rotas REST (/livros)
 ├── bookwise-collection.json     # Coleção exportada (Thunder Client / Postman / Insomnia)
 ├── package.json                 # Dependências e scripts de execução
-└── server.js                    # Configuração do Express, CORS e registro das rotas
+└── server.js                    # Configuração do Express, CORS e porta 3000
 ```
 
----
+###  Instruções para Execução
 
-### 📐 3. Modelo do Banco de Dados
-
-#### Diagrama Entidade-Relacionamento (DER)
-
-```text
-+--------------------------+          +-----------------------------------+
-|        categorias        |          |              livros               |
-+--------------------------+          +-----------------------------------+
-| PK id        INTEGER     |1       N | PK id           INTEGER           |
-|    nome      TEXT UNIQUE |<---------|    titulo       TEXT              |
-|    descricao TEXT        |          |    autor        TEXT              |
-+--------------------------+          |    status       TEXT              |
-                                      |    opiniao      TEXT              |
-                                      | FK categoria_id INTEGER           |
-                                      +-----------------------------------+
-```
-
-#### Script SQL de Criação (DDL)
-
-```sql
-PRAGMA foreign_keys = ON;
-
-CREATE TABLE IF NOT EXISTS categorias (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL UNIQUE,
-    descricao TEXT
-);
-
-CREATE TABLE IF NOT EXISTS livros (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    titulo TEXT NOT NULL,
-    autor TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'quero-ler' CHECK (status IN ('lido', 'lendo', 'quero-ler')),
-    opiniao TEXT,
-    categoria_id INTEGER NOT NULL,
-    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE RESTRICT
-);
-```
-
----
-
-### 📋 4. Descrição das Entidades e Relacionamentos
-
-#### Entidade `categorias` (Entidade Pai)
-Armazena os gêneros ou áreas temáticas utilizadas para organizar o acervo de leitura:
-* **`id`** (`INTEGER`, `PRIMARY KEY AUTOINCREMENT`): Identificador único gerado automaticamente para cada categoria.
-* **`nome`** (`TEXT`, `NOT NULL UNIQUE`): Nome da categoria (obrigatório e único no banco, impedindo categorias duplicadas).
-* **`descricao`** (`TEXT`, opcional): Descrição resumida sobre os tipos de obras pertencentes à categoria.
-
-#### Entidade `livros` (Entidade Filha)
-Armazena os livros cadastrados pelo usuário, suas anotações e o status de leitura:
-* **`id`** (`INTEGER`, `PRIMARY KEY AUTOINCREMENT`): Identificador único gerado automaticamente para cada livro.
-* **`titulo`** (`TEXT`, `NOT NULL`): Título da obra (obrigatório).
-* **`autor`** (`TEXT`, `NOT NULL`): Nome do(a) autor(a) da obra (obrigatório).
-* **`status`** (`TEXT`, `NOT NULL DEFAULT 'quero-ler'`): Situação atual de leitura, restrita pela cláusula `CHECK` aos valores `'lido'`, `'lendo'` ou `'quero-ler'`.
-* **`opiniao`** (`TEXT`, opcional): Resenha ou comentários pessoais sobre a leitura.
-* **`categoria_id`** (`INTEGER`, `NOT NULL`, `FOREIGN KEY`): Chave estrangeira que referencia `categorias(id)`, vinculando o livro à sua categoria.
-
-#### Relacionamento (`1:N` — Um para Muitos)
-* **Cardinalidade:** Uma **Categoria** (`1`) pode estar associada a **zero ou muitos Livros** (`N`), enquanto cada **Livro** pertence obrigatoriamente a **uma única Categoria**.
-* **Integridade Referencial (`ON DELETE RESTRICT`):** Não é permitido cadastrar ou atualizar um livro informando um `categoria_id` inexistente, nem excluir uma categoria enquanto houver livros vinculados a ela.
-
----
-
-### ▶️ 5. Instruções para Criação do Banco e Execução
-
-1. Abra o terminal na pasta do back-end:
+1. Abra o terminal na pasta do servidor:
    ```bash
    cd src/backend
    ```
@@ -310,34 +221,128 @@ Armazena os livros cadastrados pelo usuário, suas anotações e o status de lei
    ```bash
    npm install
    ```
-3. **Criação do banco de dados:** O arquivo `src/backend/database/bookwise.sqlite`, as tabelas (`categorias` e `livros`) e os registros iniciais (*seed*) são criados automaticamente pelo módulo `database/connection.js` assim que o servidor é iniciado (também pode ser executado isoladamente com `node database/connection.js`).
-4. Inicie a aplicação:
+3. Inicie o servidor:
    ```bash
    npm start
    ```
-5. O servidor ficará disponível em `http://localhost:3000`. Todos os dados inseridos, alterados ou removidos permanecem salvos no arquivo `bookwise.sqlite` mesmo após encerrar e reiniciar o servidor.
-6. Para testar todas as rotas no **Thunder Client**, **Postman** ou **Insomnia**, importe o arquivo `src/backend/bookwise-collection.json`.
+4. A API ficará disponível em `http://localhost:3000`.
+5. Para testar todas as rotas automaticamente, importe o arquivo `src/backend/bookwise-collection.json` no **Thunder Client**, **Postman** ou **Insomnia**.
 
 ---
 
-### 📡 6. Documentação dos Endpoints
+###  Documentação dos Endpoints (`/livros`)
 
 | Método | Endpoint | Descrição | Códigos HTTP |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/categorias` | Lista todas as categorias cadastradas | `200 OK`, `500` |
-| `GET` | `/categorias/:id` | Consulta uma categoria específica pelo ID | `200 OK`, `400`, `404`, `500` |
-| `POST` | `/categorias` | Cadastra uma nova categoria | `201 Created`, `400`, `409`, `500` |
-| `PUT` | `/categorias/:id` | Atualiza uma categoria existente | `200 OK`, `400`, `404`, `409`, `500` |
-| `DELETE` | `/categorias/:id` | Exclui uma categoria sem livros vinculados | `200 OK`, `400`, `404`, `409`, `500` |
-| `GET` | `/livros` | Lista todos os livros com dados da categoria (`INNER JOIN`) | `200 OK`, `500` |
-| `GET` | `/livros/:id` | Consulta um livro específico pelo ID | `200 OK`, `400`, `404`, `500` |
-| `POST` | `/livros` | Cadastra um novo livro vinculado a uma categoria | `201 Created`, `400`, `500` |
-| `PUT` | `/livros/:id` | Atualiza os dados de um livro existente | `200 OK`, `400`, `404`, `500` |
-| `DELETE` | `/livros/:id` | Remove um livro pelo ID | `200 OK`, `400`, `404`, `500` |
+| `GET` | `/livros` | Lista todos os livros cadastrados | `200 OK` |
+| `GET` | `/livros/:id` | Busca um livro específico pelo ID | `200 OK`, `400 Bad Request`, `404 Not Found` |
+| `POST` | `/livros` | Cadastra um novo livro no acervo | `201 Created`, `400 Bad Request` |
+| `PUT` | `/livros/:id` | Atualiza os dados de um livro existente | `200 OK`, `400 Bad Request`, `404 Not Found` |
+| `DELETE` | `/livros/:id` | Remove um livro específico pelo ID | `200 OK`, `400 Bad Request`, `404 Not Found` |
 
 ---
 
-### 🧪 7. Exemplos de Operações CRUD
+### Exemplos de Requisições e Respostas
+
+#### 1. Listar todos os livros (`GET /livros`)
+* **Resposta (`200 OK`):**
+```json
+[
+  {
+    "id": 1,
+    "titulo": "Clean Code",
+    "autor": "Robert C. Martin",
+    "categoria": "Tecnologia",
+    "status": "lido",
+    "opiniao": "Essencial para aprender boas práticas de legibilidade e refatoração."
+  }
+]
+```
+
+#### 2. Consulta individual (`GET /livros/1`)
+* **Resposta (`200 OK`):**
+```json
+{
+  "id": 1,
+  "titulo": "Clean Code",
+  "autor": "Robert C. Martin",
+  "categoria": "Tecnologia",
+  "status": "lido",
+  "opiniao": "Essencial para aprender boas práticas de legibilidade e refatoração."
+}
+```
+
+#### 3. Cadastrar novo livro (`POST /livros`)
+* **Corpo da Requisição (`application/json`):**
+```json
+{
+  "titulo": "O Programador Pragmático",
+  "autor": "Andrew Hunt e David Thomas",
+  "categoria": "Tecnologia",
+  "status": "quero-ler",
+  "opiniao": "Leitura fundamental sobre engenharia de software."
+}
+```
+* **Resposta (`201 Created`):**
+```json
+{
+  "id": 3,
+  "titulo": "O Programador Pragmático",
+  "autor": "Andrew Hunt e David Thomas",
+  "categoria": "Tecnologia",
+  "status": "quero-ler",
+  "opiniao": "Leitura fundamental sobre engenharia de software."
+}
+```
+
+#### 4. Atualizar livro (`PUT /livros/3`)
+* **Corpo da Requisição (`application/json`):**
+```json
+{
+  "titulo": "O Programador Pragmático",
+  "autor": "Andrew Hunt e David Thomas",
+  "categoria": "Tecnologia",
+  "status": "lido",
+  "opiniao": "Concluído! Excelentes dicas práticas para o dia a dia."
+}
+```
+* **Resposta (`200 OK`):**
+```json
+{
+  "id": 3,
+  "titulo": "O Programador Pragmático",
+  "autor": "Andrew Hunt e David Thomas",
+  "categoria": "Tecnologia",
+  "status": "lido",
+  "opiniao": "Concluído! Excelentes dicas práticas para o dia a dia."
+}
+```
+
+#### 5. Excluir livro (`DELETE /livros/3`)
+* **Resposta (`200 OK`):**
+```json
+{
+  "mensagem": "Livro removido com sucesso.",
+  "livro": {
+    "id": 3,
+    "titulo": "O Programador Pragmático",
+    "autor": "Andrew Hunt e David Thomas",
+    "categoria": "Tecnologia",
+    "status": "lido",
+    "opiniao": "Concluído! Excelentes dicas práticas para o dia a dia."
+  }
+}
+```
+
+#### 6. Exemplos de Tratamento de Erros
+* **Campo obrigatório ausente (`POST /livros` com `{"titulo": ""}`):**
+  * **Status:** `400 Bad Request`
+  * **Resposta:** `{"erro": "O campo 'titulo' é obrigatório."}`
+* **Registro inexistente (`GET /livros/999`):**
+  * **Status:** `404 Not Found`
+  * **Resposta:** `{"erro": "Livro com ID 999 não encontrado."}`
+
+### 7. Exemplos de Operações CRUD
 
 #### 1. Create — Cadastrar Categoria (`POST /categorias`)
 * **Corpo da Requisição (`application/json`):**
@@ -455,6 +460,143 @@ Armazena os livros cadastrados pelo usuário, suas anotações e o status de lei
   }
 }
 ```
+#  Etapa 07 — Persistência e CRUD com Banco de Dados
+
+Evolução da API REST do **BookWise** substituindo o armazenamento temporário em memória por persistência real em banco de dados relacional (**SQLite**), contemplando duas entidades relacionadas (`categorias` e `livros`), desacoplamento via padrão **Repository**, validações de entrada e tratamento de erros de persistência e integridade referencial.
+
+---
+
+### 1. Escolha do Banco de Dados e Justificativa
+
+* **Banco de Dados Escolhido:** **SQLite** (Modelo Relacional), integrado por meio do módulo nativo `node:sqlite` do Node.js.
+* **Justificativa da Escolha:**
+  1. **Integridade Referencial e Consistência:** O domínio do BookWise possui entidades estruturadas com dependência direta entre si (`categorias` e `livros`). O modelo relacional permite garantir a consistência dos dados no próprio banco por meio de chaves primárias (`PRIMARY KEY`), restrições de unicidade (`UNIQUE`), validação de domínio (`CHECK`) e chaves estrangeiras (`FOREIGN KEY`).
+  2. **Portabilidade e Execução Imediata:** O SQLite armazena todo o banco de dados em um único arquivo local (`src/backend/database/bookwise.sqlite`), eliminando a necessidade de instalar ou configurar servidores externos de banco de dados para executar e avaliar a aplicação.
+  3. **Desacoplamento entre API e Banco (Padrão Repository):** Toda a lógica de acesso a dados e comandos SQL foi isolada na camada `src/backend/repositories/`. As rotas e os controladores HTTP não possuem acoplamento direto com o SQLite, facilitando futuras manutenções ou migrações de SGBD.
+
+---
+
+### 2. Arquitetura do Back-end
+
+```text
+src/backend/
+├── database/
+│   ├── connection.js            # Conexão SQLite, PRAGMA foreign_keys, DDL e seed inicial
+│   └── bookwise.sqlite          # Arquivo do banco de dados gerado automaticamente
+├── repositories/
+│   ├── categoriaRepository.js   # Operações SQL da entidade categorias
+│   └── livroRepository.js       # Operações SQL da entidade livros (com INNER JOIN)
+├── controllers/
+│   ├── categoriasController.js  # Regras de negócio, validações e erros HTTP de /categorias
+│   └── livrosController.js      # Regras de negócio, validações e erros HTTP de /livros
+├── routes/
+│   ├── categoriasRoutes.js      # Definição dos endpoints /categorias
+│   └── livrosRoutes.js          # Definição dos endpoints /livros
+├── bookwise-collection.json     # Coleção exportada (Thunder Client / Postman / Insomnia)
+├── package.json                 # Dependências e scripts de execução
+└── server.js                    # Configuração do Express, CORS e registro das rotas
+```
+
+---
+
+### 3. Modelo do Banco de Dados
+
+#### Diagrama Entidade-Relacionamento (DER)
+
+```text
++--------------------------+          +-----------------------------------+
+|        categorias        |          |              livros               |
++--------------------------+          +-----------------------------------+
+| PK id        INTEGER     |1       N | PK id           INTEGER           |
+|    nome      TEXT UNIQUE |<---------|    titulo       TEXT              |
+|    descricao TEXT        |          |    autor        TEXT              |
++--------------------------+          |    status       TEXT              |
+                                      |    opiniao      TEXT              |
+                                      | FK categoria_id INTEGER           |
+                                      +-----------------------------------+
+```
+
+#### Script SQL de Criação (DDL)
+
+```sql
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS categorias (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL UNIQUE,
+    descricao TEXT
+);
+
+CREATE TABLE IF NOT EXISTS livros (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    autor TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'quero-ler' CHECK (status IN ('lido', 'lendo', 'quero-ler')),
+    opiniao TEXT,
+    categoria_id INTEGER NOT NULL,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE RESTRICT
+);
+```
+
+---
+
+### 4. Descrição das Entidades e Relacionamentos
+
+#### Entidade `categorias` (Entidade Pai)
+Armazena os gêneros ou áreas temáticas utilizadas para organizar o acervo de leitura:
+* **`id`** (`INTEGER`, `PRIMARY KEY AUTOINCREMENT`): Identificador único gerado automaticamente para cada categoria.
+* **`nome`** (`TEXT`, `NOT NULL UNIQUE`): Nome da categoria (obrigatório e único no banco, impedindo categorias duplicadas).
+* **`descricao`** (`TEXT`, opcional): Descrição resumida sobre os tipos de obras pertencentes à categoria.
+
+#### Entidade `livros` (Entidade Filha)
+Armazena os livros cadastrados pelo usuário, suas anotações e o status de leitura:
+* **`id`** (`INTEGER`, `PRIMARY KEY AUTOINCREMENT`): Identificador único gerado automaticamente para cada livro.
+* **`titulo`** (`TEXT`, `NOT NULL`): Título da obra (obrigatório).
+* **`autor`** (`TEXT`, `NOT NULL`): Nome do(a) autor(a) da obra (obrigatório).
+* **`status`** (`TEXT`, `NOT NULL DEFAULT 'quero-ler'`): Situação atual de leitura, restrita pela cláusula `CHECK` aos valores `'lido'`, `'lendo'` ou `'quero-ler'`.
+* **`opiniao`** (`TEXT`, opcional): Resenha ou comentários pessoais sobre a leitura.
+* **`categoria_id`** (`INTEGER`, `NOT NULL`, `FOREIGN KEY`): Chave estrangeira que referencia `categorias(id)`, vinculando o livro à sua categoria.
+
+#### Relacionamento (`1:N` — Um para Muitos)
+* **Cardinalidade:** Uma **Categoria** (`1`) pode estar associada a **zero ou muitos Livros** (`N`), enquanto cada **Livro** pertence obrigatoriamente a **uma única Categoria**.
+* **Integridade Referencial (`ON DELETE RESTRICT`):** Não é permitido cadastrar ou atualizar um livro informando um `categoria_id` inexistente, nem excluir uma categoria enquanto houver livros vinculados a ela.
+
+---
+
+### 5. Instruções para Criação do Banco e Execução
+
+1. Abra o terminal na pasta do back-end:
+   ```bash
+   cd src/backend
+   ```
+2. Instale as dependências (`express` e `cors`):
+   ```bash
+   npm install
+   ```
+3. **Criação do banco de dados:** O arquivo `src/backend/database/bookwise.sqlite`, as tabelas (`categorias` e `livros`) e os registros iniciais (*seed*) são criados automaticamente pelo módulo `database/connection.js` assim que o servidor é iniciado (também pode ser executado isoladamente com `node database/connection.js`).
+4. Inicie a aplicação:
+   ```bash
+   npm start
+   ```
+5. O servidor ficará disponível em `http://localhost:3000`. Todos os dados inseridos, alterados ou removidos permanecem salvos no arquivo `bookwise.sqlite` mesmo após encerrar e reiniciar o servidor.
+6. Para testar todas as rotas no **Thunder Client**, **Postman** ou **Insomnia**, importe o arquivo `src/backend/bookwise-collection.json`.
+
+---
+
+### 6. Documentação dos Endpoints
+
+| Método | Endpoint | Descrição | Códigos HTTP |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/categorias` | Lista todas as categorias cadastradas | `200 OK`, `500` |
+| `GET` | `/categorias/:id` | Consulta uma categoria específica pelo ID | `200 OK`, `400`, `404`, `500` |
+| `POST` | `/categorias` | Cadastra uma nova categoria | `201 Created`, `400`, `409`, `500` |
+| `PUT` | `/categorias/:id` | Atualiza uma categoria existente | `200 OK`, `400`, `404`, `409`, `500` |
+| `DELETE` | `/categorias/:id` | Exclui uma categoria sem livros vinculados | `200 OK`, `400`, `404`, `409`, `500` |
+| `GET` | `/livros` | Lista todos os livros com dados da categoria (`INNER JOIN`) | `200 OK`, `500` |
+| `GET` | `/livros/:id` | Consulta um livro específico pelo ID | `200 OK`, `400`, `404`, `500` |
+| `POST` | `/livros` | Cadastra um novo livro vinculado a uma categoria | `201 Created`, `400`, `500` |
+| `PUT` | `/livros/:id` | Atualiza os dados de um livro existente | `200 OK`, `400`, `404`, `500` |
+| `DELETE` | `/livros/:id` | Remove um livro pelo ID | `200 OK`, `400`, `404`, `500` |
 
 #### 7. Delete — Excluir Categoria sem Vínculos (`DELETE /categorias/4`)
 * **Resposta (`200 OK`):**
